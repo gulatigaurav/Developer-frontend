@@ -6,7 +6,7 @@ class Main extends Component {
         <div>
           <h3>HomePage</h3>
           <p>
-          Free Lance BootCamp by Gaurav Gulati
+          FreeLance BootCamp by Gaurav Gulati
           </p>
         </div>
     )
