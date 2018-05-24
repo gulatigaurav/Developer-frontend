@@ -3,17 +3,69 @@ import React, { Component } from "react";
 class NewProposal extends Component {
   state = {
     customer: "",
+    customerValidation: {
+      validation: {
+        required: true,
+        minLength: 3,
+        maxLength: 25
+      }
+    },
+    portfolioValidation: {
+      validation: {
+        required: true
+      }
+    },
+    toolsValidation: {
+      validation: {
+        required: true
+      }
+    },
+
+    customerValidity: false,
     portfolio_url: "http://",
+    portfolioValidity: false,
     tools: "",
+    toolsValidity: false,
     estimated_hours: 0,
     hourly_rate: 0,
     weeks_to_complete: 0,
-    client_email: ""
+    client_email: "",
+    clientValidity: false,
+    clientValidation: {
+      validation: {
+        email: true
+      }
+    }
+  };
+
+  checkValidity = (value, rules) => {
+    let isValid = true;
+    if (rules.required) {
+      isValid = value.trim() !== "" && isValid;
+    }
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid;
+    }
+
+    if (rules.maxLength) {
+      isValid = value.length <= rules.maxLength && isValid;
+    }
+
+    if (rules.email) {
+      isValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value);
+    }
+    return isValid;
   };
 
   handleCustomerChange = () => {
+    let val = this.refs.customer.value;
+    let valid = this.checkValidity(
+      val,
+      this.state.customerValidation.validation
+    );
     this.setState({
-      customer: this.refs.customer.value
+      customer: val,
+      customerValidity: valid
     });
   };
 
@@ -43,12 +95,16 @@ class NewProposal extends Component {
     });
   };
   handleClientEmailChange = () => {
+    let val = this.refs.client_email.value;
+    let valid = this.checkValidity(val, this.state.clientValidation.validation);
     this.setState({
-      client_email: this.refs.client_email.value
+      client_email: val,
+      clientValidity: valid
     });
   };
 
   render() {
+    console.log(this.state);
     return (
       <div>
         <h3>New Proposal</h3>
@@ -63,6 +119,7 @@ class NewProposal extends Component {
               required
             />
           </label>
+          <br />
           <label>
             Tools:
             <input
@@ -73,7 +130,7 @@ class NewProposal extends Component {
               required
             />
           </label>
-
+          <br />
           <label>
             Portfolio URL:
             <input
@@ -84,7 +141,7 @@ class NewProposal extends Component {
               required
             />
           </label>
-
+          <br />
           <label>
             Estimated Hours:
             <input
@@ -95,7 +152,7 @@ class NewProposal extends Component {
               required
             />
           </label>
-
+          <br />
           <label>
             Hourly Rate:
             <input
@@ -106,7 +163,7 @@ class NewProposal extends Component {
               required
             />
           </label>
-
+          <br />
           <label>
             Weeks to Complete:
             <input
@@ -117,7 +174,7 @@ class NewProposal extends Component {
               required
             />
           </label>
-
+          <br />
           <label>
             Client Email (Optional):
             <input
